@@ -1,126 +1,49 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Caderno Digital — Login</title>
+<title>Davi Walker — Caderno Digital</title>
 <style>
-  body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f3f6fb; }
-  .wrap { max-width:800px; margin:40px auto; padding:20px; }
-  .card { background:#fff; padding:20px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.08); }
-  h1 { margin-top:0; }
-  label { display:block; margin-top:10px; font-weight:600; }
-  input { width:100%; padding:10px; margin-top:5px; border-radius:8px; border:1px solid #ccc; }
-  button { margin-top:15px; padding:10px 14px; border:none; border-radius:10px; background:#2b8ed6; color:#fff; cursor:pointer; }
-  .smallbtn { background:transparent; border:1px solid #ccc; color:#333; padding:8px 12px; margin-top:10px; cursor:pointer; }
-  .hidden { display:none; }
-  .list { margin-top:20px; max-height:400px; overflow:auto; }
-  .item { padding:12px; background:#fefefe; border:1px solid #eee; border-radius:8px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; }
+  body { margin:0; font-family: Arial, sans-serif; background: #f3f6fb; color:#333; }
+  header { background:#2b8ed6; padding:20px 40px; display:flex; justify-content:space-between; align-items:center; color:#fff; }
+  header h1 { margin:0; font-size:28px; }
+  nav button { padding:10px 15px; border:none; border-radius:8px; cursor:pointer; background:#ffdd57; color:#333; font-weight:600; margin-left:10px; }
+  .hero { text-align:center; padding:60px 20px; background: linear-gradient(to right, #2b8ed6, #a0d8f1); color:#fff; }
+  .hero h2 { font-size:36px; margin-bottom:20px; }
+  .hero p { font-size:20px; max-width:600px; margin:0 auto 30px auto; line-height:1.5; }
+  .hero button { font-size:18px; padding:12px 20px; border:none; border-radius:10px; background:#ffdd57; color:#333; font-weight:600; cursor:pointer; }
+  .propaganda { margin:40px auto; max-width:800px; background:#fff3cd; border:1px solid #ffeeba; padding:20px; border-radius:12px; text-align:center; font-size:18px; color:#856404; }
+  footer { text-align:center; padding:20px; background:#2b8ed6; color:#fff; font-size:14px; }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <!-- LOGIN -->
-  <div id="loginCard" class="card">
-    <h1>📖 Caderno Digital</h1>
-    <label>Usuário</label>
-    <input type="text" id="user" placeholder="Digite seu usuário">
-    <label>Senha</label>
-    <input type="password" id="pass" placeholder="Digite sua senha">
-    <button id="btnLogin">Entrar</button>
-    <button id="btnRegister" class="smallbtn">Criar Conta</button>
-    <p style="margin-top:10px; font-size:13px; color:#666;">As contas ficam salvas apenas no navegador.</p>
-  </div>
 
-  <!-- PAINEL -->
-  <div id="appCard" class="card hidden">
-    <h1>📚 Meus Textos</h1>
-    <label>Conteúdo do texto:</label>
-    <textarea id="newContent" rows="6" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc;"></textarea>
-    <button id="btnCreate">Salvar e Abrir</button>
+<header>
+  <h1>Davi Walker</h1>
+  <nav>
+    <button onclick="window.location.href='loginForm.html'">Login</button>
+    <button onclick="window.location.href='loginForm.html'">Registrar</button>
+  </nav>
+</header>
 
-    <div class="list" id="list"></div>
-    <button id="btnLogout" style="margin-top:10px;background:#ff5a5f;">Sair</button>
-  </div>
+<section class="hero">
+  <h2>Bem-vindo ao meu Caderno Digital!</h2>
+  <p>Sou Davi Walker, estudante, e aqui ensino o pouco do que sei, compartilhando conteúdos para estudo e aprendizado prático. Organize seus textos, suas ideias e seu conhecimento comigo!</p>
+  <button onclick="window.location.href='loginForm.html'">Acessar Caderno</button>
+</section>
+
+<div class="propaganda">
+  🎉 Promoção especial! Assine o caderno digital e tenha acesso ilimitado aos conteúdos de estudo por apenas R$9,90/mês!  
+  <br><br>
+  <button onclick="window.location.href='loginForm.html'">Assinar Agora</button>
 </div>
 
-<script>
-let users = JSON.parse(localStorage.getItem('cd_users')||'{}');
-let currentUser = sessionStorage.getItem('cd_user') || null;
+<footer>
+  © 2025 Davi Walker — Todos os direitos reservados
+</footer>
 
-const loginCard = document.getElementById('loginCard');
-const appCard = document.getElementById('appCard');
-const userInput = document.getElementById('user');
-const passInput = document.getElementById('pass');
-const btnLogin = document.getElementById('btnLogin');
-const btnRegister = document.getElementById('btnRegister');
-const btnLogout = document.getElementById('btnLogout');
-const newContent = document.getElementById('newContent');
-const btnCreate = document.getElementById('btnCreate');
-const listDiv = document.getElementById('list');
-
-function showApp() { loginCard.classList.add('hidden'); appCard.classList.remove('hidden'); loadTexts(); }
-function showLogin() { loginCard.classList.remove('hidden'); appCard.classList.add('hidden'); }
-
-if(currentUser) showApp();
-
-btnRegister.addEventListener('click', ()=>{
-  const u = userInput.value.trim(); const p = passInput.value;
-  if(!u||!p) return alert('Preencha usuário e senha');
-  if(users[u]) return alert('Usuário já existe');
-  users[u] = p;
-  localStorage.setItem('cd_users', JSON.stringify(users));
-  alert('Conta criada! Faça login.');
-});
-
-btnLogin.addEventListener('click', ()=>{
-  const u = userInput.value.trim(); const p = passInput.value;
-  if(users[u] && users[u]===p){
-    currentUser = u;
-    sessionStorage.setItem('cd_user', u);
-    showApp();
-  } else alert('Usuário ou senha incorretos');
-});
-
-btnLogout.addEventListener('click', ()=>{
-  sessionStorage.removeItem('cd_user'); currentUser=null; showLogin();
-});
-
-function saveText(content){
-  let texts = JSON.parse(localStorage.getItem('cd_texts')||'[]');
-  const id = Date.now();
-  texts.push({ id, user:currentUser, content, createdAt:new Date().toISOString() });
-  localStorage.setItem('cd_texts', JSON.stringify(texts));
-  return id;
-}
-
-function loadTexts(){
-  listDiv.innerHTML='';
-  let texts = JSON.parse(localStorage.getItem('cd_texts')||'[]');
-  texts = texts.filter(t=>t.user===currentUser).sort((a,b)=>b.id-a.id);
-  texts.forEach(t=>{
-    const div = document.createElement('div'); 
-    div.className='item';
-    
-    // Exibir primeiras palavras + data
-    const preview = t.content.length > 30 ? t.content.slice(0,30)+'...' : t.content;
-    const date = new Date(t.createdAt).toLocaleString('pt-BR');
-    div.innerHTML = `<strong>${preview}</strong> <span style="font-size:12px;color:#888;">${date}</span>`;
-    
-    div.addEventListener('click', ()=> {
-      window.open('texto.html?id='+t.id,'_blank');
-    });
-    listDiv.appendChild(div);
-  });
-}
-
-btnCreate.addEventListener('click', ()=>{
-  if(!newContent.value.trim()) return alert('Digite o conteúdo do texto');
-  saveText(newContent.value.trim());
-  newContent.value='';
-  loadTexts();
-});
-</script>
 </body>
 </html>
 
