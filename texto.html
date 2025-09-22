@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caderno Digital — Texto</title>
+<style>
+  body{font-family:Arial,sans-serif;margin:0;padding:20px;background:#f3f6fb;}
+  .card{background:#fff;padding:20px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.08);}
+  textarea{width:100%;min-height:300px;padding:12px;border-radius:8px;border:1px solid #ccc;font-size:15px}
+  button{margin-top:10px;padding:10px 14px;border:none;border-radius:10px;background:#2b8ed6;color:#fff;cursor:pointer;}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>✏️ Texto</h1>
+  <textarea id="editor"></textarea>
+  <button id="btnSave">Salvar</button>
+</div>
+
+<script>
+const params = new URLSearchParams(location.search);
+const id = parseInt(params.get('id'));
+if(!id){ alert('ID ausente'); history.back(); }
+
+let texts = JSON.parse(localStorage.getItem('cd_texts')||'[]');
+let text = texts.find(t=>t.id===id);
+if(!text){ alert('Texto não encontrado'); history.back(); }
+const editor = document.getElementById('editor');
+editor.value = text.content;
+
+document.getElementById('btnSave').addEventListener('click', ()=>{
+  text.content = editor.value;
+  localStorage.setItem('cd_texts', JSON.stringify(texts));
+  alert('Texto salvo!');
+});
+</script>
+</body>
+</html>
